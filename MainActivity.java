@@ -1,5 +1,8 @@
 package com.example.abhimanyu.cafeteria;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +56,16 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager frag=getSupportFragmentManager();
         FragmentTransaction ft=frag.beginTransaction();
         ft.replace(R.id.container,new Prices()).commit();
-    }
+        File f = new File(
+                "/data/data/com.example.abhimanyu.cafeteria/shared_prefs/creds.xml");
+        if (f.exists()){
+
+        }
+
+        else{
+            Intent myIntent = new Intent(getApplicationContext(), login.class);
+            startActivity(myIntent);
+        }
+               }
 
 }

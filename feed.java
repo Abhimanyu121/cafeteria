@@ -3,10 +3,27 @@ package com.example.abhimanyu.cafeteria;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -18,6 +35,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class feed extends Fragment {
+    EditText ph,nm,em,feed;
+    View mView;
+    FirebaseFirestore db=FirebaseFirestore.getInstance();
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -64,7 +85,51 @@ public class feed extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_feed, container, false);
+       mView= inflater.inflate(R.layout.fragment_feed, container, false);
+       nm=(EditText)mView.findViewById(R.id.name);
+        ph=(EditText)mView.findViewById(R.id.phone);
+        feed=(EditText)mView.findViewById(R.id.feedback);
+        Button butoon=(Button)mView.findViewById(R.id.push);
+        butoon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                put();
+            }
+        });
+        return mView;
+    }
+    public void put(){
+        if(nm==null||ph==null||ph==null){
+            Toast.makeText(getContext(),"Fill all details",Toast.LENGTH_LONG);
+        }
+        else{
+            String name=nm.getText().toString();
+            String phone=ph.getText().toString();
+            String fee=feed.getText().toString();
+            Map<String,Object> send=new HashMap<>();
+            send.put("name",name);
+            send.put("feedback",fee);
+
+            db.collection("feedbacks").document(phone).set(send).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG,"worked!!");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG,"Didnt work niggga!!");
+                }
+            });;
+
+            nm.setText("");
+            ph.setText("");
+            feed.setText("");
+            TextView tv=(TextView)mView.findViewById(R.id.finish);
+            tv.setText("Done!!");
+
+        }
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

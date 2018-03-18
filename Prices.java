@@ -4,9 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 
 /**
@@ -18,6 +27,23 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class Prices extends Fragment {
+    Integer count;
+    String ct;
+    public void getcount(){
+        DocumentReference mDocRef= FirebaseFirestore.getInstance().document("/itemcount/count");
+        mDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                if(documentSnapshot.exists())
+                count=documentSnapshot.getLong("no").intValue();
+            }
+        });
+        Log.w("bleh",""+count);
+
+
+    }
+    View mView;
+    int flag=1;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -28,8 +54,44 @@ public class Prices extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    public void fetch()
+    {
+        for(int i=1;i<=count;i++){
+
+            DocumentReference mDocRef= FirebaseFirestore.getInstance().document("/items/"+i);
+
+            mDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+
+                public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                    if(documentSnapshot.exists())
+                    {
+                        String item=documentSnapshot.getString("item").toString();
+                        String price=documentSnapshot.getString("price");
+                        LinearLayout linear=(LinearLayout)mView.findViewById(R.id.ll);
+                        TextView tv=new TextView(getContext());
+                        tv.setText("Name:-"+item+"\n"+"Price:-"+price+"\n");
+                        tv.setTextColor(getResources().getColor(R.color.colorAccent));
+                        tv.setTextSize(23);
+                        linear.addView(tv);
+
+
+                    }
+                    else{
+                        flag=0;
+                    }
+
+                }
+            });
+            if(flag==1){}
+            else {
+                break;
+            }
+        }
+    }
 
     public Prices() {
+
+
         // Required empty public constructor
     }
 
@@ -58,13 +120,17 @@ public class Prices extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mView=inflater.inflate(R.layout.fragment_prices, container, false);;
+        getcount();
+        fetch();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_prices, container, false);
+        return mView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

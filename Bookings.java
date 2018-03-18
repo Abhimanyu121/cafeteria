@@ -1,6 +1,7 @@
 package com.example.abhimanyu.cafeteria;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -37,7 +39,7 @@ import static android.content.ContentValues.TAG;
  * create an instance of this fragment.
  */
 public class Bookings extends Fragment {
-    String em,ph,nm,tn,otot,oava;
+    String em,ph,nm,tn,otot,oava,name,phno;
     int oCount;
     EditText emm,eph,enm;
     FirebaseFirestore db=FirebaseFirestore.getInstance();
@@ -141,6 +143,19 @@ public class Bookings extends Fragment {
 
                }
             }});
+        SharedPreferences prefs = getContext().getSharedPreferences("creds", MODE_PRIVATE);
+        String restoredName = prefs.getString("name", null);
+
+        String restoredPhno = prefs.getString("phno", null);
+        if (restoredName != null) {
+            name = prefs.getString("name", "");//"No name defined" is the default value.
+            phno = prefs.getString("phno", ""); //0 is the default value.
+        }
+        enm.setText(name);
+        eph.setText(phno);
+        enm.setEnabled(false);
+        eph.setEnabled(false);
+
         return mView;
     }
     public void book()
