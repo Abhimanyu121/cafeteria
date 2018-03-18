@@ -1,9 +1,11 @@
 package com.example.abhimanyu.cafeteria;
 
 import android.content.Context;
+import android.widget.LinearLayout;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +36,8 @@ public class Prices extends Fragment {
         mDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if(documentSnapshot.exists())
-                count=documentSnapshot.getLong("no").intValue();
+              //  if(documentSnapshot.exists())
+              //  count=documentSnapshot.getLong("no").intValue();
             }
         });
         Log.w("bleh",""+count);
@@ -56,7 +58,7 @@ public class Prices extends Fragment {
     private OnFragmentInteractionListener mListener;
     public void fetch()
     {
-        for(int i=1;i<=count;i++){
+        for(int i=1;i<=5;i++){
 
             DocumentReference mDocRef= FirebaseFirestore.getInstance().document("/items/"+i);
 
@@ -68,11 +70,20 @@ public class Prices extends Fragment {
                         String item=documentSnapshot.getString("item").toString();
                         String price=documentSnapshot.getString("price");
                         LinearLayout linear=(LinearLayout)mView.findViewById(R.id.ll);
+                        LinearLayout.LayoutParams params =
+                                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                        CardView cv=new CardView(getContext());
+                        cv.setLayoutParams(params);
+                        cv.setContentPadding(2, 1, 2, 1);
+                        cv.setMaxCardElevation(5);
+                        cv.setCardElevation(9);
                         TextView tv=new TextView(getContext());
                         tv.setText("Name:-"+item+"\n"+"Price:-"+price+"\n");
                         tv.setTextColor(getResources().getColor(R.color.colorAccent));
                         tv.setTextSize(23);
-                        linear.addView(tv);
+                        cv.addView(tv);
+                        linear.addView(cv);
 
 
                     }
