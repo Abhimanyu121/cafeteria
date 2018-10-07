@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.*;
 
 import java.io.File;
 
