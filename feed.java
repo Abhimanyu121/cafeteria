@@ -32,7 +32,7 @@ import static android.content.ContentValues.TAG;
  * {@link feed.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link feed#newInstance} factory method to
- * create an instance of this fragment.
+ * create an INstance of this fragment.
  */
 public class feed extends Fragment {
     EditText ph,nm,em,feed;
