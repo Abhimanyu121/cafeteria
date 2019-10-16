@@ -48,7 +48,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class login extends AppCompatActivity  {
     EditText ph,pass;
     String sphno="",spass;
-
+//Zhxjfkc
 
 
 
