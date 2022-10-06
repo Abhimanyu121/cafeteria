@@ -151,10 +151,11 @@ public class Bookings extends Fragment {
             name = prefs.getString("name", "");//"No name defined" is the default value.
             phno = prefs.getString("phno", ""); //0 is the default value.
         }
-        enm.setText(name);
-        eph.setText(phno);
+      
         enm.setEnabled(false);
         eph.setEnabled(false);
+        enm.setText(name);
+        eph.setText(phno);
 
         return mView;
     }
@@ -219,6 +220,12 @@ public class Bookings extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
+       public void onButtonNotPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+    
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
