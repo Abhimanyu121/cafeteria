@@ -44,7 +44,7 @@ import java.util.Map;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via email and password.
  */
 public class register extends AppCompatActivity  {
 EditText email,name,phone,pass;
