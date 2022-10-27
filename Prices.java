@@ -104,6 +104,7 @@ public class Prices extends Fragment {
 
 
         // Required empty public constructor
+        // Required empty public constructor
     }
 
     /**
